@@ -1,31 +1,11 @@
-package br.unip.greenhouse;
+package br.unip.greenhouse.model;
 
 import java.util.Random;
 
-public class Info {
+public class InfoSimulator {
 
-    private final byte airTemperature; //celcius
-    private final byte airHumidity; //percent
-    private final byte soilHumidity; //percent
-    private final float soilPh; //5.5-7.5
-
-    public Info(byte airTemperature, byte airHumidity, byte soilHumidity, float soilPh) {
-	this.airTemperature = airTemperature;
-	this.soilHumidity = soilHumidity;
-	this.airHumidity = airHumidity;
-	this.soilPh = soilPh;
-    }
-
-    @Override
-    public String toString() {
-	return "Info{" + "airTemperature=" + airTemperature + 
-		", airHumidity=" + airHumidity + 
-		", soilHumidity=" + soilHumidity + 
-		", soilPh=" + soilPh + 
-		'}';
-    }
-
-    //Simulated Info:
+    private InfoSimulator() {}
+    
     private static final Random random = new Random();
     private static byte startAirTemperature;
     private static byte startAirHumidity;
@@ -34,6 +14,7 @@ public class Info {
     
     public static Info create(){
 	startAirTemperature = (byte)(random.nextInt(70)-10);
+	if(startAirTemperature == 0) startAirTemperature = 1;
 	startAirHumidity = (byte)(random.nextInt(80-20)+20);
 	startSoilHumidity = (byte)(random.nextInt(70-35)+35);
 	startSoilPh = random.nextFloat()*(7.5F-5F)+5F;
@@ -41,13 +22,14 @@ public class Info {
     }
     
     public static Info update(Action a, Info i){
-	byte airT = i.airTemperature;
-	byte airH = i.airHumidity;
-	byte soilH = i.soilHumidity;
+	byte airT = i.getAirTemperature();
+	byte airH = i.getAirHumidity();
+	byte soilH = i.getSoilHumidity();
 	if(a.isExaust()){
 	    if((Math.abs(airT)-2)/Math.abs((float)startAirTemperature) > 0.8) airT-=2;
 	}else{
 	   if(airT+2 < startAirTemperature) airT+=2;
+	   else if(airT+1 < startAirTemperature) airT++;
 	}
 	
 	if(a.isLight()){
@@ -63,6 +45,7 @@ public class Info {
 	    if(airH-1 > startAirHumidity) airH--;
 	    if(soilH-1 > startSoilHumidity) soilH--;
 	}
-	return new Info(airT, airH, soilH, i.soilPh);
+	return new Info(airT, airH, soilH, i.getSoilPh());
     }
+    
 }

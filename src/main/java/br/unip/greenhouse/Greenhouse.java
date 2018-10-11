@@ -1,5 +1,8 @@
 package br.unip.greenhouse;
 
+import br.unip.greenhouse.model.Action;
+import br.unip.greenhouse.model.Info;
+import br.unip.greenhouse.model.InfoSimulator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.File;
@@ -38,13 +41,13 @@ public class Greenhouse {
 	new Thread(new Runnable(){
 	    @Override
 	    public void run() {
-		info = Info.create(); //simulate sensor
+		info = InfoSimulator.create();
 		while(running){
-		    action = (Action) read(ACTION_FILE, Action.class);
+		    action = read(ACTION_FILE, Action.class);
 		    if(action == null) createFiles();
 		    if(DEBUG) view.appendText(action.toString());
 		    /*IOT do actions then read sensors*/
-		    info = Info.update(action, info); //simulate sensor reacting to actions
+		    info = InfoSimulator.update(action, info);
 		    try {
 			save(info, INFO_FILE);
 		    } catch (IOException ex) {

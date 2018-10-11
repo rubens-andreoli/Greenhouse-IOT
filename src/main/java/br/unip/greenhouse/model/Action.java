@@ -1,4 +1,4 @@
-package br.unip.greenhouse;
+package br.unip.greenhouse.model;
 
 public class Action {
         
