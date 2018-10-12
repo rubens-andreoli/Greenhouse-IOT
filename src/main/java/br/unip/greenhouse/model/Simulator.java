@@ -2,38 +2,44 @@ package br.unip.greenhouse.model;
 
 import java.util.Random;
 
-public class InfoSimulator {
+public class Simulator {
 
-    private InfoSimulator() {}
-    
     private static final Random random = new Random();
-    private static byte startAirTemperature;
-    private static byte startAirHumidity;
-    private static byte startSoilHumidity;
-    private static float startSoilPh;
+    private final byte startAirTemperature;
+    private final byte startAirHumidity;
+    private final byte startSoilHumidity;
+    private final float startSoilPh;
     
-    public static Info create(){
-	startAirTemperature = (byte)(random.nextInt(70)-10);
-	if(startAirTemperature == 0) startAirTemperature = 1;
+    public Simulator() {
+    	startAirTemperature = (byte)(random.nextInt(70)-10);
 	startAirHumidity = (byte)(random.nextInt(80-20)+20);
 	startSoilHumidity = (byte)(random.nextInt(70-35)+35);
 	startSoilPh = random.nextFloat()*(7.5F-5F)+5F;
+    }
+
+    public Info createInfo(){
 	return new Info(startAirTemperature, startAirHumidity, startSoilHumidity, startSoilPh);
     }
     
-    public static Info update(Action a, Info i){
+    public Info updateInfo(Action a, Info i){
 	byte airT = i.getAirTemperature();
 	byte airH = i.getAirHumidity();
 	byte soilH = i.getSoilHumidity();
 	if(a.isExaust()){
-	    if((Math.abs(airT)-2)/Math.abs((float)startAirTemperature) > 0.8) airT-=2;
+	    if((Math.abs(airT)-2) > Math.abs(startAirTemperature*0.7) 
+		    && (Math.abs(airT)-2) < Math.abs(startAirTemperature*1.3)){
+		airT-=2;
+	    }
 	}else{
 	   if(airT+2 < startAirTemperature) airT+=2;
 	   else if(airT+1 < startAirTemperature) airT++;
 	}
 	
 	if(a.isLight()){
-	    if((Math.abs(airT)+1)/Math.abs((float)startAirTemperature) < 1.2) airT++;
+	    if(Math.abs(airT+1) < Math.abs(startAirTemperature*1.2) 
+		    && Math.abs(airT+1) > Math.abs(startAirTemperature*0.8)){
+		airT++;
+	    }
 	}else{
 	    if(airT-1 > startAirTemperature) airT--;
 	}

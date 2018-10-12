@@ -1,5 +1,5 @@
 {
   "light": false,
   "water": false,
-  "exaust": false
+  "exaust": true
 }

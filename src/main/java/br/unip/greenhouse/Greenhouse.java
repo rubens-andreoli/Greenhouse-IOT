@@ -2,7 +2,7 @@ package br.unip.greenhouse;
 
 import br.unip.greenhouse.model.Action;
 import br.unip.greenhouse.model.Info;
-import br.unip.greenhouse.model.InfoSimulator;
+import br.unip.greenhouse.model.Simulator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.File;
@@ -13,12 +13,13 @@ import javax.swing.JOptionPane;
 
 public class Greenhouse {
     
-    private static final byte LOOP_SLEEP = 10; //seconds
+    private static final int LOOP_SLEEP = 10000; //ms
     private static final boolean DEBUG = true;
     private View view;
     
     private static final File INFO_FILE = new File("info.json");
     private Info info;
+    private Simulator simulator;
     private static final File ACTION_FILE = new File("action.json");
     private Action action;
     
@@ -26,9 +27,8 @@ public class Greenhouse {
     
     public void start(){
 	running = true;
-	
-	createFiles();
-	
+	simulator = new Simulator();
+
 	if(DEBUG){
 	    view = new View();
 	    java.awt.EventQueue.invokeLater(new Runnable() {
@@ -38,28 +38,30 @@ public class Greenhouse {
 	    });
 	}
 	
+	createFiles();
+	
 	new Thread(new Runnable(){
 	    @Override
 	    public void run() {
-		info = InfoSimulator.create();
+		info = simulator.createInfo();
 		while(running){
 		    action = read(ACTION_FILE, Action.class);
 		    if(action == null) createFiles();
 		    if(DEBUG) view.appendText(action.toString());
 		    /*IOT do actions then read sensors*/
-		    info = InfoSimulator.update(action, info);
+		    info = simulator.updateInfo(action, info);
 		    try {
 			save(info, INFO_FILE);
 		    } catch (IOException ex) {
 			showError(ex);
-			System.exit(1);
+			stop();
 		    }
 		    if(DEBUG){
 			view.appendText(info.toString());
 			view.breakText();
 		    }
 		    try {
-			Thread.sleep(LOOP_SLEEP*1000);
+			Thread.sleep(LOOP_SLEEP);
 		    } catch (InterruptedException ex) {}
 		}			
 	    }
@@ -68,6 +70,7 @@ public class Greenhouse {
     
     public void stop(){
 	running = false;
+	if(DEBUG) view.dispose();
     }
     
     private void createFiles(){
@@ -76,7 +79,7 @@ public class Greenhouse {
 	    if(!ACTION_FILE.exists()) save(new Action(false, false, false), ACTION_FILE);
 	} catch (IOException ex) {
 	    showError(ex);
-	    System.exit(1);
+	    stop();
 	}
     }
     
