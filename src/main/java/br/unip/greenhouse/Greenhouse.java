@@ -15,12 +15,10 @@ public class Greenhouse {
     
     private static final int LOOP_SLEEP = 10000; //ms
     private static final boolean DEBUG = true;
-    private View view;
     
-    private static final File INFO_FILE = new File("info.json");
+    private View view;
     private Info info;
     private Simulator simulator;
-    private static final File ACTION_FILE = new File("action.json");
     private Action action;
     
     private boolean running;
@@ -28,9 +26,10 @@ public class Greenhouse {
     public void start(){
 	running = true;
 	simulator = new Simulator();
-
+	info = simulator.createInfo();
+	
 	if(DEBUG){
-	    view = new View();
+	    view = new View(info.id);
 	    java.awt.EventQueue.invokeLater(new Runnable() {
 		public void run() {
 		    view.setVisible(true);
@@ -43,15 +42,14 @@ public class Greenhouse {
 	new Thread(new Runnable(){
 	    @Override
 	    public void run() {
-		info = simulator.createInfo();
 		while(running){
-		    action = read(ACTION_FILE, Action.class);
+		    action = read(Action.ACTION_FILE, Action.class);
 		    if(action == null) createFiles();
 		    if(DEBUG) view.appendText(action.toString());
 		    /*IOT do actions then read sensors*/
 		    info = simulator.updateInfo(action, info);
 		    try {
-			save(info, INFO_FILE);
+			save(info, Info.INFO_FILE);
 		    } catch (IOException ex) {
 			showError(ex);
 			stop();
@@ -75,8 +73,8 @@ public class Greenhouse {
     
     private void createFiles(){
     	try {
-	    if(!INFO_FILE.exists()) save(new Info((byte)0,(byte)0,(byte)0,0F), INFO_FILE);
-	    if(!ACTION_FILE.exists()) save(new Action(false, false, false), ACTION_FILE);
+	    if(!Info.INFO_FILE.exists()) save(new Info((byte)0,(byte)0,(byte)0,(byte)0,0F), Info.INFO_FILE);
+	    if(!Action.ACTION_FILE.exists()) save(new Action(false, false, false), Action.ACTION_FILE);
 	} catch (IOException ex) {
 	    showError(ex);
 	    stop();

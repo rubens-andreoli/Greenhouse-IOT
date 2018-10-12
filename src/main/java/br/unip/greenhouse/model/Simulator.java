@@ -5,26 +5,29 @@ import java.util.Random;
 public class Simulator {
 
     private static final Random random = new Random();
+    
+    private final byte id;
     private final byte startAirTemperature;
     private final byte startAirHumidity;
     private final byte startSoilHumidity;
     private final float startSoilPh;
     
     public Simulator() {
-    	startAirTemperature = (byte)(random.nextInt(70)-10);
+    	id = 1;
+	startAirTemperature = (byte)(random.nextInt(70)-10);
 	startAirHumidity = (byte)(random.nextInt(80-20)+20);
 	startSoilHumidity = (byte)(random.nextInt(70-35)+35);
 	startSoilPh = random.nextFloat()*(7.5F-5F)+5F;
     }
 
     public Info createInfo(){
-	return new Info(startAirTemperature, startAirHumidity, startSoilHumidity, startSoilPh);
+	return new Info(id, startAirTemperature, startAirHumidity, startSoilHumidity, startSoilPh);
     }
     
     public Info updateInfo(Action a, Info i){
-	byte airT = i.getAirTemperature();
-	byte airH = i.getAirHumidity();
-	byte soilH = i.getSoilHumidity();
+	byte airT = i.airTemperature;
+	byte airH = i.airHumidity;
+	byte soilH = i.soilHumidity;
 	if(a.isExaust()){
 	    if((Math.abs(airT)-2) > Math.abs(startAirTemperature*0.7) 
 		    && (Math.abs(airT)-2) < Math.abs(startAirTemperature*1.3)){
@@ -51,7 +54,7 @@ public class Simulator {
 	    if(airH-1 > startAirHumidity) airH--;
 	    if(soilH-1 > startSoilHumidity) soilH--;
 	}
-	return new Info(airT, airH, soilH, i.getSoilPh());
+	return new Info(id, airT, airH, soilH, i.soilPh);
     }
     
 }

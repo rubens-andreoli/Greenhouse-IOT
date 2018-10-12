@@ -4,9 +4,10 @@ import javax.swing.text.DefaultCaret;
 
 public class View extends javax.swing.JFrame {
     
-    public View() {
+    public View(byte id) {
 	initComponents();
 	((DefaultCaret) txaLog.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+	this.setTitle(this.getTitle()+" ["+id+"]");
     }
 
     @SuppressWarnings("unchecked")
