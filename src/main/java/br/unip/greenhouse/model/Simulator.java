@@ -18,14 +18,14 @@ public class Simulator {
 	startSoilPh = random.nextFloat()*(7.5F-5F)+5F;
     }
 
-    public Info createInfo(){
-	return new Info(startAirTemperature, startAirHumidity, startSoilHumidity, startSoilPh);
+    public Sensors createInfo(){
+	return new Sensors(startAirTemperature, startAirHumidity, startSoilHumidity, startSoilPh);
     }
     
-    public Info updateInfo(Action a, Info i){
-	float airT = i.airTemperature;
-	float airH = i.airHumidity;
-	float soilH = i.soilHumidity;
+    public Sensors updateInfo(Actions a, Sensors s){
+	float airT = s.airTemperature;
+	float airH = s.airHumidity;
+	float soilH = s.soilHumidity;
 	if(a.exaust){
 	    if((Math.abs(airT)-2) > Math.abs(startAirTemperature*0.7) 
 		    && (Math.abs(airT)-2) < Math.abs(startAirTemperature*1.3)){
@@ -52,7 +52,7 @@ public class Simulator {
 	    if(airH-1 > startAirHumidity) airH--;
 	    if(soilH-1 > startSoilHumidity) soilH--;
 	}
-	return new Info(airT, airH, soilH, i.soilPh);
+	return new Sensors(airT, airH, soilH, s.soilPh);
     }
     
 }

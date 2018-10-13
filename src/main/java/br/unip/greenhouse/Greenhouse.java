@@ -1,7 +1,7 @@
 package br.unip.greenhouse;
 
-import br.unip.greenhouse.model.Action;
-import br.unip.greenhouse.model.Info;
+import br.unip.greenhouse.model.Actions;
+import br.unip.greenhouse.model.Sensors;
 import br.unip.greenhouse.model.Simulator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -17,9 +17,9 @@ public class Greenhouse {
     private static final boolean DEBUG = true;
     
     private View view;
-    private Info info;
+    private Sensors info;
     private Simulator simulator;
-    private Action action;
+    private Actions action;
     
     private boolean running;
     
@@ -43,13 +43,13 @@ public class Greenhouse {
 	    @Override
 	    public void run() {
 		while(running){
-		    action = read(Action.ACTION_FILE, Action.class);
+		    action = read(Actions.ACTION_FILE, Actions.class);
 		    if(action == null) createFiles();
 		    if(DEBUG) view.appendText(action.toString());
 		    /*IOT do actions then read sensors*/
 		    info = simulator.updateInfo(action, info);
 		    try {
-			save(info, Info.INFO_FILE);
+			save(info, Sensors.INFO_FILE);
 		    } catch (IOException ex) {
 			showError(ex);
 			stop();
@@ -73,8 +73,8 @@ public class Greenhouse {
     
     private void createFiles(){
     	try {
-	    if(!Info.INFO_FILE.exists()) save(new Info(0F,0F,0F,0F), Info.INFO_FILE);
-	    if(!Action.ACTION_FILE.exists()) save(new Action(false, false, false), Action.ACTION_FILE);
+	    if(!Sensors.INFO_FILE.exists()) save(new Sensors(0F,0F,0F,0F), Sensors.INFO_FILE);
+	    if(!Actions.ACTION_FILE.exists()) save(new Actions(false, false, false), Actions.ACTION_FILE);
 	} catch (IOException ex) {
 	    showError(ex);
 	    stop();
