@@ -6,14 +6,12 @@ public class Info {
 
     public static final File INFO_FILE = new File("info.json");
     
-    public final byte id;
-    public final byte airTemperature; //celcius
-    public final byte airHumidity; //percent
-    public final byte soilHumidity; //percent
+    public final float airTemperature; //celcius
+    public final float airHumidity; //percent
+    public final float soilHumidity; //percent
     public final float soilPh; //5.5-7.5
 
-    public Info(byte id, byte airTemperature, byte airHumidity, byte soilHumidity, float soilPh) {
-	this.id = id;
+    public Info(float airTemperature, float airHumidity, float soilHumidity, float soilPh) {
 	this.airTemperature = airTemperature;
 	this.soilHumidity = soilHumidity;
 	this.airHumidity = airHumidity;

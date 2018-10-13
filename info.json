@@ -1,7 +1,6 @@
 {
-  "id": 1,
-  "airTemperature": 6,
-  "airHumidity": 32,
-  "soilHumidity": 47,
-  "soilPh": 5.170584
+  "airTemperature": 19.0,
+  "airHumidity": 38.0,
+  "soilHumidity": 57.0,
+  "soilPh": 6.83939
 }

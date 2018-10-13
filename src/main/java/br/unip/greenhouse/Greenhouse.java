@@ -29,7 +29,7 @@ public class Greenhouse {
 	info = simulator.createInfo();
 	
 	if(DEBUG){
-	    view = new View(info.id);
+	    view = new View();
 	    java.awt.EventQueue.invokeLater(new Runnable() {
 		public void run() {
 		    view.setVisible(true);
@@ -73,7 +73,7 @@ public class Greenhouse {
     
     private void createFiles(){
     	try {
-	    if(!Info.INFO_FILE.exists()) save(new Info((byte)0,(byte)0,(byte)0,(byte)0,0F), Info.INFO_FILE);
+	    if(!Info.INFO_FILE.exists()) save(new Info(0F,0F,0F,0F), Info.INFO_FILE);
 	    if(!Action.ACTION_FILE.exists()) save(new Action(false, false, false), Action.ACTION_FILE);
 	} catch (IOException ex) {
 	    showError(ex);

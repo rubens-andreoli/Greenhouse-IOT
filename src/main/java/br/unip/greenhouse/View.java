@@ -4,10 +4,9 @@ import javax.swing.text.DefaultCaret;
 
 public class View extends javax.swing.JFrame {
     
-    public View(byte id) {
+    public View() {
 	initComponents();
 	((DefaultCaret) txaLog.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-	this.setTitle(this.getTitle()+" ["+id+"]");
     }
 
     @SuppressWarnings("unchecked")
@@ -40,7 +39,7 @@ public class View extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(slpLog, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+            .addComponent(slpLog, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnClear)
