@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 
 public class Greenhouse {
     
-    private static final int LOOP_SLEEP = 10000; //ms
+    private static final int LOOP_SLEEP = 20000; //ms
     private static final boolean DEBUG = true;
     
     private View view;
