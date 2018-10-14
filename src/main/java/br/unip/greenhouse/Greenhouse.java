@@ -5,6 +5,7 @@ import br.unip.greenhouse.model.Sensors;
 import br.unip.greenhouse.model.Simulator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -17,16 +18,16 @@ public class Greenhouse {
     private static final boolean DEBUG = true;
     
     private View view;
-    private Sensors info;
+    private Sensors sensors;
     private Simulator simulator;
-    private Actions action;
+    private Actions actions;
     
     private boolean running;
     
     public void start(){
 	running = true;
 	simulator = new Simulator();
-	info = simulator.createInfo();
+	sensors = simulator.createSensors();
 	
 	if(DEBUG){
 	    view = new View();
@@ -43,19 +44,19 @@ public class Greenhouse {
 	    @Override
 	    public void run() {
 		while(running){
-		    action = read(Actions.ACTION_FILE, Actions.class);
-		    if(action == null) createFiles();
-		    if(DEBUG) view.appendText(action.toString());
+		    actions = read(Actions.ACTIONS_FILE, Actions.class);
+		    if(actions == null) createFiles();
+		    if(DEBUG) view.appendText(actions.toString());
 		    /*IOT do actions then read sensors*/
-		    info = simulator.updateInfo(action, info);
+		    sensors = simulator.updateSensors(actions, sensors);
 		    try {
-			save(info, Sensors.INFO_FILE);
+			save(sensors, Sensors.SENSORS_FILE);
 		    } catch (IOException ex) {
 			showError(ex);
 			stop();
 		    }
 		    if(DEBUG){
-			view.appendText(info.toString());
+			view.appendText(sensors.toString());
 			view.breakText();
 		    }
 		    try {
@@ -68,13 +69,13 @@ public class Greenhouse {
     
     public void stop(){
 	running = false;
-	if(DEBUG) view.dispose();
+	if(DEBUG) view.dispatchEvent(new WindowEvent(view, WindowEvent.WINDOW_CLOSING));
     }
     
     private void createFiles(){
     	try {
-	    if(!Sensors.INFO_FILE.exists()) save(new Sensors(0F,0F,0F,0F), Sensors.INFO_FILE);
-	    if(!Actions.ACTION_FILE.exists()) save(new Actions(false, false, false), Actions.ACTION_FILE);
+	    if(!Sensors.SENSORS_FILE.exists()) save(new Sensors(0F,0F,0F,0F), Sensors.SENSORS_FILE);
+	    if(!Actions.ACTIONS_FILE.exists()) save(new Actions(false, false, false), Actions.ACTIONS_FILE);
 	} catch (IOException ex) {
 	    showError(ex);
 	    stop();

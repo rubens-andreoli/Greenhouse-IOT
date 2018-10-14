@@ -4,7 +4,7 @@ import java.io.File;
 
 public class Sensors {
 
-    public static final File INFO_FILE = new File("sensors.json");
+    public static final File SENSORS_FILE = new File("sensors.json");
     
     public final float airTemperature; //celcius
     public final float airHumidity; //percent

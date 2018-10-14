@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Simulator {
 
-    private static final Random random = new Random();
+    private static final Random RANDOM = new Random();
     
     private final float startAirTemperature;
     private final float startAirHumidity;
@@ -12,17 +12,17 @@ public class Simulator {
     private final float startSoilPh;
     
     public Simulator() {
-	startAirTemperature = random.nextInt(70)-10;
-	startAirHumidity = random.nextInt(80-20)+20;
-	startSoilHumidity = random.nextInt(70-35)+35;
-	startSoilPh = random.nextFloat()*(7.5F-5F)+5F;
+	startAirTemperature = RANDOM.nextInt(70)-10;
+	startAirHumidity = RANDOM.nextInt(80-20)+20;
+	startSoilHumidity = RANDOM.nextInt(70-35)+35;
+	startSoilPh = RANDOM.nextFloat()*(7.5F-5F)+5F;
     }
 
-    public Sensors createInfo(){
+    public Sensors createSensors(){
 	return new Sensors(startAirTemperature, startAirHumidity, startSoilHumidity, startSoilPh);
     }
     
-    public Sensors updateInfo(Actions a, Sensors s){
+    public Sensors updateSensors(Actions a, Sensors s){
 	float airT = s.airTemperature;
 	float airH = s.airHumidity;
 	float soilH = s.soilHumidity;

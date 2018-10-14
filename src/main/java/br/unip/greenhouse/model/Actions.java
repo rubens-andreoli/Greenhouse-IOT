@@ -4,7 +4,7 @@ import java.io.File;
 
 public class Actions {
     
-    public static final File ACTION_FILE = new File("actions.json");
+    public static final File ACTIONS_FILE = new File("actions.json");
     
     public final boolean light;
     public final boolean water;
