@@ -12,7 +12,7 @@ public class Simulator {
     private final float startSoilPh;
     
     public Simulator() {
-	startAirTemperature = RANDOM.nextInt(70)-10;
+	startAirTemperature = RANDOM.nextInt(45-15)+15;
 	startAirHumidity = RANDOM.nextInt(80-20)+20;
 	startSoilHumidity = RANDOM.nextInt(70-35)+35;
 	startSoilPh = RANDOM.nextFloat()*(7.5F-5F)+5F;
@@ -27,30 +27,23 @@ public class Simulator {
 	float airH = s.airHumidity;
 	float soilH = s.soilHumidity;
 	if(a.exaust){
-	    if((Math.abs(airT)-2) > Math.abs(startAirTemperature*0.7) 
-		    && (Math.abs(airT)-2) < Math.abs(startAirTemperature*1.3)){
-		airT-=2;
-	    }
+	    if((airT-2)/startAirTemperature > 0.7) airT-=2;
 	}else{
-	   if(airT+2 < startAirTemperature) airT+=2;
-	   else if(airT+1 < startAirTemperature) airT++;
+	   if(airT < startAirTemperature) airT++;
 	}
 	
 	if(a.light){
-	    if(Math.abs(airT+1) < Math.abs(startAirTemperature*1.2) 
-		    && Math.abs(airT+1) > Math.abs(startAirTemperature*0.8)){
-		airT++;
-	    }
+	    if((airT+1)/startAirTemperature < 1.2) airT++;
 	}else{
-	    if(airT-1 > startAirTemperature) airT--;
+	    if(airT > startAirTemperature) airT--;
 	}
 	
 	if(a.water){ 
-	    if((airH+1)/(float)startAirHumidity < 1.5) airH++;
-	    if((soilH+1)/(float)startSoilHumidity < 1.3) soilH++;
+	    if((airH+1)/startAirHumidity < 1.5) airH++;
+	    if((soilH+1)/startSoilHumidity < 1.3) soilH++;
 	}else{
-	    if(airH-1 > startAirHumidity) airH--;
-	    if(soilH-1 > startSoilHumidity) soilH--;
+	    if(airH > startAirHumidity) airH--;
+	    if(soilH > startSoilHumidity) soilH--;
 	}
 	return new Sensors(airT, airH, soilH, s.soilPh);
     }
